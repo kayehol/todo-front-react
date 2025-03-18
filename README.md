@@ -6,6 +6,9 @@ Front-end do Gerenciador de tarefas: crie,edite e remova tarefas.
 
 ![Editando uma tarefa](public/task.png)
 
+### Requisitos:
+- Node: v23 (recomendado)
+
 ## Como executar
 
 ### 1. Execute o back-end
