@@ -22,13 +22,26 @@ export default function Register() {
     setSnackbarOpen(false);
   };
 
-  const handleRegister = async () => {
-    try {
+  const validateForm = (): boolean => {
+    if (!username || !password || !passwordConfirm) {
+      setError("Todos os campos são obrigatórios");
+      return false;
 
-      if (password !== passwordConfirm) {
-        setError("Confirmação de senha incorreta");
-        return;
-      }
+    }
+
+    if (password !== passwordConfirm) {
+      setError("Confirmação de senha incorreta");
+      return false;
+    }
+
+    return true;
+  }
+
+  const handleRegister = async () => {
+
+    if (!validateForm()) return;
+
+    try {
       setLoading(true);
 
       const baseUrl = "http://localhost:3000/api";
@@ -99,10 +112,10 @@ export default function Register() {
                 required
               />
             </form>
-            {error && <Typography>{error}</Typography>}
+            {error && <Typography color="error">{error}</Typography>}
           </CardContent>
           <CardActions className="flex justify-end">
-            <Button onClick={handleRegister} variant="contained">
+            <Button onClick={handleRegister} variant="contained" disabled={loading}>
               <SaveIcon fontSize="small" className="mr-3" />
               Enviar
             </Button>
