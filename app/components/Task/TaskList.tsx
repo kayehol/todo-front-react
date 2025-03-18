@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Box, Button, Grid2, List, ListItem, Pagination, Snackbar, Typography } from "@mui/material"
+import { Alert, Box, Button, List, ListItem, Pagination, Snackbar, Stack, Typography } from "@mui/material"
 import TaskCard from "./TaskCard"
 import { Task } from "./props/TaskCardProps";
 import { useEffect, useState } from "react";
@@ -47,7 +47,7 @@ const TaskList: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:3000/api/task?page=${page}&limit=${TASKS_PER_PAGE}`)
+      const res = await fetch(`http://localhost:3000/api/task`)
 
       if (!res.ok)
         throw new Error("Erro ao buscar tarefas");
@@ -84,10 +84,10 @@ const TaskList: React.FC = () => {
     }
   }
 
-  const saveTask = async () => {
+  const saveTask = async (method: string) => {
     await fetchTasks();
 
-    setSnackbarMessage("Tarefa adicionada com sucesso");
+    setSnackbarMessage(`Tarefa ${method === 'POST' ? 'criada' : 'atualizada'} com sucesso`);
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
   }
@@ -105,7 +105,7 @@ const TaskList: React.FC = () => {
   return (
     <Box className="p-3">
       <Typography className="mb-10" variant="h5">Lista de tarefas</Typography>
-      <Button className="mt-10" color="primary" variant="outlined" onClick={openDialogForNewTask}>Adicionar</Button>
+      <Button className="mt-10" color="primary" variant="contained" onClick={openDialogForNewTask}>Adicionar</Button>
       <List>
         {currentTasks.map(task => (
           <ListItem disablePadding key={task.id}>
@@ -117,7 +117,7 @@ const TaskList: React.FC = () => {
           </ListItem>
         ))}
       </List>
-      <Box>
+      <Stack spacing={2}>
         <Pagination
           count={totalPages}
           page={page}
@@ -125,7 +125,7 @@ const TaskList: React.FC = () => {
           className="mt-5"
           color="primary"
         />
-      </Box>
+      </Stack>
 
       <TaskFormDialog
         open={dialogOpen}

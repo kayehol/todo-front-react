@@ -1,4 +1,4 @@
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, TextField } from "@mui/material";
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from "@mui/material";
 import { TaskFormDialogProps } from "./props/TaskFormDialogProps";
 import { useEffect, useState } from "react";
 import { Task } from "./props/TaskCardProps";
@@ -46,7 +46,7 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, on
 
       const savedTask = await res.json();
 
-      onSave(savedTask);
+      onSave(method);
       onClose();
     } catch (error) {
       console.error('Erro ao salvar task', error);
@@ -58,15 +58,6 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, on
       className="p-10"
       open={open}
       onClose={onClose}
-      slotProps={{
-        paper: {
-          component: 'form',
-          onSubmit: (event: React.FormEvent) => {
-            event.preventDefault();
-            onClose();
-          }
-        }
-      }}
     >
       <DialogTitle>{task ? 'Editar tarefa' : 'Adicionar tarefa'}</DialogTitle>
       <DialogContent>
@@ -93,8 +84,8 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, on
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">Cancelar</Button>
-        <Button onClick={handleSubmit} color="primary">{task ? 'Atualizar' : 'Salvar'}</Button>
+        <Button onClick={onClose} color="secondary" variant="contained">Cancelar</Button>
+        <Button onClick={handleSubmit} color="success" variant="contained">{task ? 'Atualizar' : 'Salvar'}</Button>
       </DialogActions>
     </Dialog>
   )

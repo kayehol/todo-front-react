@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import TaskList from "./components/Task/TaskList";
 
 export default function Home() {
