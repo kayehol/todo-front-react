@@ -3,6 +3,7 @@ export interface Task {
   title: string;
   description: string;
   done: boolean;
+  userId: number | undefined;
 }
 
 export interface TaskCardProps {

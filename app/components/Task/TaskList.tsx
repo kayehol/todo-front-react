@@ -5,9 +5,12 @@ import TaskCard from "./TaskCard"
 import { Task } from "./props/TaskCardProps";
 import { useEffect, useState } from "react";
 import TaskFormDialog from "./TaskFormDialog";
-import { useRouter } from "next/navigation";
 
-const TaskList: React.FC = () => {
+interface TaskListProps {
+  userId: number | undefined;
+}
+
+const TaskList: React.FC<TaskListProps> = ({ userId }) => {
   const TASKS_PER_PAGE: number = 5;
 
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -21,7 +24,6 @@ const TaskList: React.FC = () => {
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const router = useRouter();
 
   const openDialogForNewTask = () => {
     setEditingTask(null);
@@ -46,10 +48,15 @@ const TaskList: React.FC = () => {
   };
 
   const fetchTasks = async () => {
+    const token = localStorage.getItem('token');
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:3000/api/task`)
+      const res = await fetch(`http://localhost:3000/api/task`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : ''
+        }
+      })
 
       if (!res.ok)
         throw new Error("Erro ao buscar tarefas");
@@ -64,8 +71,14 @@ const TaskList: React.FC = () => {
   }
 
   const removeTask = async (task: Task) => {
+    const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:3000/api/task/${task.id}`, { method: 'DELETE' })
+      const res = await fetch(`http://localhost:3000/api/task/${task.id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: token ? `Bearer ${token}` : ''
+        }
+      })
 
       if (!res.ok)
         throw new Error("Erro ao remover tarefa");
@@ -100,12 +113,6 @@ const TaskList: React.FC = () => {
   const totalPages = Math.ceil(tasks.length / TASKS_PER_PAGE);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      router.push('/login');
-      return;
-    }
 
     fetchTasks();
   }, [page])
@@ -144,12 +151,13 @@ const TaskList: React.FC = () => {
       <TaskFormDialog
         open={dialogOpen}
         task={editingTask}
+        userId={userId}
         onClose={handleClose}
         onSave={saveTask}
       />
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={3000}
+        autoHideDuration={5000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >

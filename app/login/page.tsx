@@ -36,7 +36,8 @@ export default function Login() {
 
       if (res.ok) {
         localStorage.setItem('token', data.access_token);
-        console.log(data)
+
+        setError("");
         setSnackbarMessage("Login feito com sucesso");
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
@@ -67,6 +68,7 @@ export default function Login() {
       ) : (
         <>
           <CardContent>
+            <Typography variant="h4" className="font-bold mb-5">To-do List App</Typography>
             <Typography>Login</Typography>
             <form className="flex flex-col gap-3 mt-3">
               <TextField
@@ -102,7 +104,7 @@ export default function Login() {
       )}
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={3000}
+        autoHideDuration={5000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >

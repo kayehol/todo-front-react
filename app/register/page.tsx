@@ -55,6 +55,7 @@ export default function Register() {
   }
   return (
     <Card className="w-75 mx-auto my-10 p-3">
+      <Typography variant="h4" className="font-bold mb-5">To-do List App</Typography>
       {loading ? (
         <Box className="flex justify-center items-center h-full">
           <CircularProgress />
