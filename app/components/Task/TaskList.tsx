@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Grid2, List, ListItem, Pagination, Typography } from "@mui/material"
+import { Alert, Box, Button, Grid2, List, ListItem, Pagination, Snackbar, Typography } from "@mui/material"
 import TaskCard from "./TaskCard"
 import { Task } from "./props/TaskCardProps";
 import { useEffect, useState } from "react";
@@ -12,6 +12,10 @@ const TaskList: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
 
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
@@ -35,6 +39,9 @@ const TaskList: React.FC = () => {
     setDialogOpen(false);
     setEditingTask(null);
   }
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   const fetchTasks = async () => {
     setLoading(true);
@@ -61,16 +68,28 @@ const TaskList: React.FC = () => {
       if (!res.ok)
         throw new Error("Erro ao remover tarefa");
 
-      fetchTasks();
+      await fetchTasks();
+
+      setSnackbarMessage("Tarefa removida com sucesso");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (err) {
       setError('Erro ao remover tarefa')
+
+      setSnackbarMessage(error);
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     } finally {
       setLoading(false);
     }
   }
 
-  const saveTask = async (task: Task) => {
-    fetchTasks();
+  const saveTask = async () => {
+    await fetchTasks();
+
+    setSnackbarMessage("Tarefa adicionada com sucesso");
+    setSnackbarSeverity("success");
+    setSnackbarOpen(true);
   }
 
   const idxLastTask = page * TASKS_PER_PAGE;
@@ -114,6 +133,16 @@ const TaskList: React.FC = () => {
         onClose={handleClose}
         onSave={saveTask}
       />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }
