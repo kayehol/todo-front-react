@@ -1,14 +1,10 @@
-import { Button, Typography } from '@mui/material';
+import { Typography } from "@mui/material";
+import TaskList from "./components/Task/TaskList";
 
 export default function Home() {
   return (
-    <div className="p-8">
-      <Typography variant="h4" gutterBottom>
-        Hello, welcome to my Next.js app with Tailwind and Material UI!
-      </Typography>
-      <Button variant="contained" color="primary">
-        MUI Button
-      </Button>
+    <div className="flex flex-row justify-center pt-10">
+      <TaskList />
     </div>
   );
 }
