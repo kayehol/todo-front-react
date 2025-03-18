@@ -8,6 +8,7 @@ import { useState } from "react";
 export default function Register() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [passwordConfirm, setPasswordConfirm] = useState<string>('');
 
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>('');
@@ -23,6 +24,11 @@ export default function Register() {
 
   const handleRegister = async () => {
     try {
+
+      if (password !== passwordConfirm) {
+        setError("Confirmação de senha incorreta");
+        return;
+      }
       setLoading(true);
 
       const baseUrl = "http://localhost:3000/api";
@@ -80,6 +86,15 @@ export default function Register() {
                 label="Senha"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                variant="outlined"
+                required
+              />
+              <TextField
+                id="passwordConfirm"
+                type="password"
+                label="Confirmar senha"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
                 variant="outlined"
                 required
               />
