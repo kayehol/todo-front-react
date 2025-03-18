@@ -20,18 +20,32 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, on
     }
   }, [task]);
 
-  const handleSubmit = () => {
-    if (!title || !description || !done) return;
+  const handleSubmit = async () => {
+    try {
+      const newTask: Task = {
+        title,
+        description,
+        done
+      };
 
-    const newTask: Task = {
-      id: task?.id,
-      title,
-      description,
-      done,
-    };
+      const res = await fetch('http://localhost:3000/api/task', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTask),
+      });
 
-    onSave(newTask);
-    onClose();
+      if (!res.ok)
+        throw new Error('Erro ao salvar task');
+
+      const savedTask = await res.json();
+
+      onSave(savedTask);
+      onClose();
+    } catch (error) {
+      console.error('Erro ao salvar task', error);
+    }
   };
 
   return (

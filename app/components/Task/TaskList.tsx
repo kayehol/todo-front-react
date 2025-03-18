@@ -36,8 +36,26 @@ const TaskList: React.FC = () => {
     setEditingTask(null);
   }
 
-  const saveTask = (task: Task) => {
+  const fetchTasks = async () => {
+    setLoading(true);
 
+    try {
+      const res = await fetch(`http://localhost:3000/api/task?page=${page}&limit=${TASKS_PER_PAGE}`)
+
+      if (!res.ok)
+        throw new Error("Erro ao buscar tarefas");
+
+      const tasks = await res.json();
+      setTasks(tasks);
+    } catch (err) {
+      setError('Erro ao buscar tarefas');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const saveTask = async (task: Task) => {
+    fetchTasks();
   }
 
   const idxLastTask = page * TASKS_PER_PAGE;
@@ -46,24 +64,6 @@ const TaskList: React.FC = () => {
   const totalPages = Math.ceil(tasks.length / TASKS_PER_PAGE);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      setLoading(true);
-
-      try {
-        const res = await fetch(`http://localhost:3000/api/task?page=${page}&limit=${TASKS_PER_PAGE}`)
-
-        if (!res.ok)
-          throw new Error("Erro ao buscar tarefas");
-
-        const tasks = await res.json();
-        setTasks(tasks);
-      } catch (err) {
-        setError('Erro ao buscar tarefas');
-      } finally {
-        setLoading(false);
-      }
-    }
-
 
     fetchTasks();
   }, [page])
