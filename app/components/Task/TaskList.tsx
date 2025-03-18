@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Box, Button, List, ListItem, Pagination, Snackbar, Stack, Typography } from "@mui/material"
+import { Alert, Box, Button, CircularProgress, List, ListItem, Pagination, Snackbar, Stack, Typography } from "@mui/material"
 import TaskCard from "./TaskCard"
 import { Task } from "./props/TaskCardProps";
 import { useEffect, useState } from "react";
@@ -106,17 +106,23 @@ const TaskList: React.FC = () => {
     <Box className="p-3">
       <Typography className="mb-10" variant="h5">Lista de tarefas</Typography>
       <Button className="mt-10" color="primary" variant="contained" onClick={openDialogForNewTask}>Adicionar</Button>
-      <List>
-        {currentTasks.map(task => (
-          <ListItem disablePadding key={task.id}>
-            <TaskCard
-              task={task}
-              onEdit={() => openDialogForEditTask(task)}
-              onRemove={() => removeTask(task)}
-            />
-          </ListItem>
-        ))}
-      </List>
+      {loading ? (
+        <Box className="flex justify-center items-center h-full">
+          <CircularProgress />
+        </Box>
+      ) : (
+        <List>
+          {currentTasks.map(task => (
+            <ListItem disablePadding key={task.id}>
+              <TaskCard
+                task={task}
+                onEdit={() => openDialogForEditTask(task)}
+                onRemove={() => removeTask(task)}
+              />
+            </ListItem>
+          ))}
+        </List>
+      )}
       <Stack spacing={2}>
         <Pagination
           count={totalPages}
