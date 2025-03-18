@@ -23,7 +23,19 @@ export default function Login() {
     setSnackbarOpen(false);
   };
 
+  const validateForm = (): boolean => {
+    if (!username || !password) {
+      setError("Todos os campos são obrigatórios");
+      return false;
+    }
+
+    return true;
+
+  }
+
   const handleLogin = async () => {
+    if (!validateForm()) return;
+
     try {
       setLoading(true);
 
@@ -93,10 +105,10 @@ export default function Login() {
                 required
               />
             </form>
-            {error && <Typography>{error}</Typography>}
+            {error && <Typography color="error">{error}</Typography>}
           </CardContent>
           <CardActions className="flex justify-between my-3">
-            <Button onClick={handleLogin} variant="contained">
+            <Button onClick={handleLogin} variant="contained" disabled={loading}>
               <LoginIcon fontSize="small" className="mr-2" />
               Entrar
             </Button>

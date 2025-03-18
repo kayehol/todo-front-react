@@ -22,7 +22,16 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, on
     }
   }, [task]);
 
+  const validateForm = (): boolean => {
+    if (!title || !description)
+      return false;
+
+    return true;
+  }
+
   const handleSubmit = async () => {
+    if (!validateForm()) return;
+
     const newTask: Task = {
       id: task ? task.id : undefined,
       title,
