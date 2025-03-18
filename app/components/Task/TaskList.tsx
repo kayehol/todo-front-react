@@ -1,12 +1,16 @@
 "use client";
 
-import { Alert, Box, Button, List, ListItem, Pagination, Snackbar, Stack, Typography } from "@mui/material"
+import { Alert, Box, Button, CircularProgress, List, ListItem, Pagination, Snackbar, Stack, Typography } from "@mui/material"
 import TaskCard from "./TaskCard"
 import { Task } from "./props/TaskCardProps";
 import { useEffect, useState } from "react";
 import TaskFormDialog from "./TaskFormDialog";
 
-const TaskList: React.FC = () => {
+interface TaskListProps {
+  userId: number | undefined;
+}
+
+const TaskList: React.FC<TaskListProps> = ({ userId }) => {
   const TASKS_PER_PAGE: number = 5;
 
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -44,10 +48,15 @@ const TaskList: React.FC = () => {
   };
 
   const fetchTasks = async () => {
+    const token = localStorage.getItem('token');
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:3000/api/task`)
+      const res = await fetch(`http://localhost:3000/api/task`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : ''
+        }
+      })
 
       if (!res.ok)
         throw new Error("Erro ao buscar tarefas");
@@ -62,8 +71,14 @@ const TaskList: React.FC = () => {
   }
 
   const removeTask = async (task: Task) => {
+    const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:3000/api/task/${task.id}`, { method: 'DELETE' })
+      const res = await fetch(`http://localhost:3000/api/task/${task.id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: token ? `Bearer ${token}` : ''
+        }
+      })
 
       if (!res.ok)
         throw new Error("Erro ao remover tarefa");
@@ -106,17 +121,23 @@ const TaskList: React.FC = () => {
     <Box className="p-3">
       <Typography className="mb-10" variant="h5">Lista de tarefas</Typography>
       <Button className="mt-10" color="primary" variant="contained" onClick={openDialogForNewTask}>Adicionar</Button>
-      <List>
-        {currentTasks.map(task => (
-          <ListItem disablePadding key={task.id}>
-            <TaskCard
-              task={task}
-              onEdit={() => openDialogForEditTask(task)}
-              onRemove={() => removeTask(task)}
-            />
-          </ListItem>
-        ))}
-      </List>
+      {loading ? (
+        <Box className="flex justify-center items-center h-full">
+          <CircularProgress />
+        </Box>
+      ) : (
+        <List>
+          {currentTasks.map(task => (
+            <ListItem disablePadding key={task.id}>
+              <TaskCard
+                task={task}
+                onEdit={() => openDialogForEditTask(task)}
+                onRemove={() => removeTask(task)}
+              />
+            </ListItem>
+          ))}
+        </List>
+      )}
       <Stack spacing={2}>
         <Pagination
           count={totalPages}
@@ -130,12 +151,13 @@ const TaskList: React.FC = () => {
       <TaskFormDialog
         open={dialogOpen}
         task={editingTask}
+        userId={userId}
         onClose={handleClose}
         onSave={saveTask}
       />
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={3000}
+        autoHideDuration={5000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >

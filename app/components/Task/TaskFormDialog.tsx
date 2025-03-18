@@ -3,7 +3,7 @@ import { TaskFormDialogProps } from "./props/TaskFormDialogProps";
 import { useEffect, useState } from "react";
 import { Task } from "./props/TaskCardProps";
 
-const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, onSave }) => {
+const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, onSave, userId }) => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [done, setDone] = useState<boolean>(false);
@@ -25,26 +25,27 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, on
       id: task ? task.id : undefined,
       title,
       description,
-      done
+      done,
+      userId
     };
     try {
       const method = task ? 'PATCH' : 'POST';
       const baseUrl = 'http://localhost:3000/api/task';
       const updateEndpoint = `${baseUrl}/${task?.id}`;
       const endpoint = task ? updateEndpoint : baseUrl;
+      const token = localStorage.getItem('token');
 
       const res = await fetch(endpoint, {
         method,
         headers: {
           'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : ''
         },
         body: JSON.stringify(newTask),
       });
 
       if (!res.ok)
         throw new Error('Erro ao salvar task');
-
-      const savedTask = await res.json();
 
       onSave(method);
       onClose();
