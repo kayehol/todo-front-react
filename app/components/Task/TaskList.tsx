@@ -1,6 +1,7 @@
 "use client";
 
 import { Alert, Box, Button, CircularProgress, List, ListItem, Pagination, Snackbar, Stack, Typography } from "@mui/material"
+import AddCardIcon from '@mui/icons-material/AddCard';
 import TaskCard from "./TaskCard"
 import { Task } from "./props/TaskCardProps";
 import { useEffect, useState } from "react";
@@ -118,9 +119,19 @@ const TaskList: React.FC<TaskListProps> = ({ userId }) => {
   }, [page])
 
   return (
-    <Box className="p-3">
-      <Typography className="mb-10" variant="h5">Lista de tarefas</Typography>
-      <Button className="mt-10" color="primary" variant="contained" onClick={openDialogForNewTask}>Adicionar</Button>
+    <Box className="flex flex-col mb-5">
+      <Box className="m-3">
+        <Typography variant="h5">Lista de tarefas</Typography>
+      </Box>
+      <Button
+        color="primary"
+        variant="contained"
+        onClick={openDialogForNewTask}
+        className="w-50"
+      >
+        <AddCardIcon fontSize="small" className="mr-2" />
+        Adicionar
+      </Button>
       {loading ? (
         <Box className="flex justify-center items-center h-full">
           <CircularProgress />
@@ -143,8 +154,13 @@ const TaskList: React.FC<TaskListProps> = ({ userId }) => {
           count={totalPages}
           page={page}
           onChange={handleChangePage}
-          className="mt-5"
+          className="mt-5 flex justify-center text-white"
           color="primary"
+          sx={{
+            '& .MuiPaginationItem-root': {
+              color: 'white',
+            },
+          }}
         />
       </Stack>
 

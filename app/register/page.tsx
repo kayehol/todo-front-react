@@ -1,12 +1,14 @@
 'use client'
 
 import { Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, Snackbar, TextField, Typography } from "@mui/material";
+import SaveIcon from '@mui/icons-material/Save';
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Register() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [passwordConfirm, setPasswordConfirm] = useState<string>('');
 
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>('');
@@ -22,6 +24,11 @@ export default function Register() {
 
   const handleRegister = async () => {
     try {
+
+      if (password !== passwordConfirm) {
+        setError("Confirmação de senha incorreta");
+        return;
+      }
       setLoading(true);
 
       const baseUrl = "http://localhost:3000/api";
@@ -54,8 +61,8 @@ export default function Register() {
     }
   }
   return (
-    <Card className="w-75 mx-auto my-10 p-3">
-      <Typography variant="h4" className="font-bold mb-5">To-do List App</Typography>
+    <Card className="w-100 mx-auto my-10 p-3">
+      <Typography variant="h4" className="font-bold">📝 To-do List App</Typography>
       {loading ? (
         <Box className="flex justify-center items-center h-full">
           <CircularProgress />
@@ -63,7 +70,7 @@ export default function Register() {
       ) : (
         <>
           <CardContent>
-            <Typography>Criar nova conta</Typography>
+            <Typography className="py-3">Criar nova conta</Typography>
             <form className="flex flex-col gap-3 mt-3">
               <TextField
                 id="username"
@@ -82,11 +89,23 @@ export default function Register() {
                 variant="outlined"
                 required
               />
+              <TextField
+                id="passwordConfirm"
+                type="password"
+                label="Confirmar senha"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+                variant="outlined"
+                required
+              />
             </form>
             {error && <Typography>{error}</Typography>}
           </CardContent>
-          <CardActions>
-            <Button onClick={handleRegister}>Enviar</Button>
+          <CardActions className="flex justify-end">
+            <Button onClick={handleRegister} variant="contained">
+              <SaveIcon fontSize="small" className="mr-3" />
+              Enviar
+            </Button>
           </CardActions>
 
         </>

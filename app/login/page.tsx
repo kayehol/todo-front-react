@@ -1,6 +1,8 @@
 'use client';
 
 import { Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, Snackbar, TextField, Typography } from "@mui/material";
+import LoginIcon from '@mui/icons-material/Login';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -60,7 +62,7 @@ export default function Login() {
 
 
   return (
-    <Card className="w-75 mx-auto my-10 p-3">
+    <Card className="w-100 mx-auto my-10 p-3">
       {loading ? (
         <Box className="flex justify-center items-center h-full">
           <CircularProgress />
@@ -68,9 +70,11 @@ export default function Login() {
       ) : (
         <>
           <CardContent>
-            <Typography variant="h4" className="font-bold mb-5">To-do List App</Typography>
-            <Typography>Login</Typography>
-            <form className="flex flex-col gap-3 mt-3">
+            <Typography variant="h4" className="font-bold">📝 To-do List App</Typography>
+            <Typography className="py-3">
+              Login
+            </Typography>
+            <form className="flex flex-col gap-3 mt-5">
               <TextField
                 id="username"
                 value={username}
@@ -91,10 +95,14 @@ export default function Login() {
             </form>
             {error && <Typography>{error}</Typography>}
           </CardContent>
-          <CardActions>
-            <Button onClick={handleLogin}>Entrar</Button>
-            <Button>
+          <CardActions className="flex justify-between my-3">
+            <Button onClick={handleLogin} variant="contained">
+              <LoginIcon fontSize="small" className="mr-2" />
+              Entrar
+            </Button>
+            <Button variant="contained">
               <Link href="/register">
+                <PersonAddIcon fontSize="small" className="mr-2" />
                 Registre-se
               </Link>
             </Button>

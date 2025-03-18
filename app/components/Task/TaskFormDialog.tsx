@@ -1,4 +1,6 @@
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
 import { TaskFormDialogProps } from "./props/TaskFormDialogProps";
 import { useEffect, useState } from "react";
 import { Task } from "./props/TaskCardProps";
@@ -56,7 +58,6 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, on
 
   return (
     <Dialog
-      className="p-10"
       open={open}
       onClose={onClose}
     >
@@ -69,6 +70,7 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, on
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           margin="normal"
+          required
         />
         <TextField
           label="Descrição"
@@ -77,16 +79,22 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, on
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           margin="normal"
+          required
         />
         <FormControlLabel
-          required
           control={<Checkbox checked={done} onChange={() => setDone((prev) => !prev)} />}
           label="Concluído"
         />
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="secondary" variant="contained">Cancelar</Button>
-        <Button onClick={handleSubmit} color="success" variant="contained">{task ? 'Atualizar' : 'Salvar'}</Button>
+      <DialogActions className="flex justify-end p-3">
+        <Button onClick={onClose} color="secondary" variant="contained">
+          <CloseIcon fontSize="small" />
+          Cancelar
+        </Button>
+        <Button onClick={handleSubmit} color="success" variant="contained">
+          <SaveIcon fontSize="small" />
+          {task ? 'Atualizar' : 'Salvar'}
+        </Button>
       </DialogActions>
     </Dialog>
   )
