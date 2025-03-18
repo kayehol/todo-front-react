@@ -5,6 +5,7 @@ import TaskCard from "./TaskCard"
 import { Task } from "./props/TaskCardProps";
 import { useEffect, useState } from "react";
 import TaskFormDialog from "./TaskFormDialog";
+import { useRouter } from "next/navigation";
 
 const TaskList: React.FC = () => {
   const TASKS_PER_PAGE: number = 5;
@@ -20,6 +21,7 @@ const TaskList: React.FC = () => {
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const router = useRouter();
 
   const openDialogForNewTask = () => {
     setEditingTask(null);
@@ -98,6 +100,12 @@ const TaskList: React.FC = () => {
   const totalPages = Math.ceil(tasks.length / TASKS_PER_PAGE);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      router.push('/login');
+      return;
+    }
 
     fetchTasks();
   }, [page])
