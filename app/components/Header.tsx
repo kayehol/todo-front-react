@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 interface HeaderProps {
   username: string | undefined;
@@ -15,10 +16,10 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
 
   return (
     <div className="flex flex-row justify-between items-center mt-5 ">
-      <h1 className="text-2xl font-bold ml-5">To-do List App</h1>
+      <h1 className="text-2xl font-bold ml-5">📝 To-do List App</h1>
       <Box className="flex flex-row gap-5 mr-5 items-center">
         {username && <Typography>{username}</Typography>}
-        {username && <Button variant="contained" onClick={handleLogout}>Logout</Button>}
+        {username && <Button variant="contained" onClick={handleLogout}><LogoutIcon />Logout</Button>}
       </Box>
     </div>
   )
