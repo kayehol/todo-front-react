@@ -2,6 +2,10 @@
 
 Front-end do Gerenciador de tarefas: crie,edite e remova tarefas.
 
+![Página inicial](public/home.png)
+
+![Editando uma tarefa](public/task.png)
+
 ## Como executar
 
 ### 1. Execute o back-end
