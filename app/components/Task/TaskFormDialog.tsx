@@ -21,15 +21,20 @@ const TaskFormDialog: React.FC<TaskFormDialogProps> = ({ open, onClose, task, on
   }, [task]);
 
   const handleSubmit = async () => {
+    const newTask: Task = {
+      id: task ? task.id : undefined,
+      title,
+      description,
+      done
+    };
     try {
-      const newTask: Task = {
-        title,
-        description,
-        done
-      };
+      const method = task ? 'PATCH' : 'POST';
+      const baseUrl = 'http://localhost:3000/api/task';
+      const updateEndpoint = `${baseUrl}/${task?.id}`;
+      const endpoint = task ? updateEndpoint : baseUrl;
 
-      const res = await fetch('http://localhost:3000/api/task', {
-        method: 'POST',
+      const res = await fetch(endpoint, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },

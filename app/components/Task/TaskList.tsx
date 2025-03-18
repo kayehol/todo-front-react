@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Grid2, Pagination, Typography } from "@mui/material"
+import { Box, Button, Grid2, List, ListItem, Pagination, Typography } from "@mui/material"
 import TaskCard from "./TaskCard"
 import { Task } from "./props/TaskCardProps";
 import { useEffect, useState } from "react";
@@ -72,13 +72,13 @@ const TaskList: React.FC = () => {
     <Box className="p-3">
       <Typography className="mb-10" variant="h5">Lista de tarefas</Typography>
       <Button className="mt-10" color="primary" variant="outlined" onClick={openDialogForNewTask}>Adicionar</Button>
-      <Grid2 container spacing={2}>
+      <List>
         {currentTasks.map(task => (
-          <Grid2 key={task.id}>
+          <ListItem disablePadding key={task.id}>
             <TaskCard task={task} onEdit={() => openDialogForEditTask(task)} />
-          </Grid2>
+          </ListItem>
         ))}
-      </Grid2>
+      </List>
       <Box>
         <Pagination
           count={totalPages}
