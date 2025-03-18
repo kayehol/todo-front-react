@@ -2,7 +2,7 @@ import { Button, Card, CardActions, CardContent, Typography } from "@mui/materia
 import React from "react";
 import { TaskCardProps } from "./props/TaskCardProps";
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onRemove }) => {
   return (
     <Card className="w-75 mx-auto my-5 p-3">
       <CardContent>
@@ -12,7 +12,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit }) => {
       </CardContent>
       <CardActions>
         <Button size="small" color="primary" onClick={onEdit}>Editar</Button>
-        <Button size="small">Remover</Button>
+        <Button size="small" onClick={onRemove}>Remover</Button>
       </CardActions>
     </Card>
   )

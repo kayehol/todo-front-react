@@ -54,6 +54,21 @@ const TaskList: React.FC = () => {
     }
   }
 
+  const removeTask = async (task: Task) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/task/${task.id}`, { method: 'DELETE' })
+
+      if (!res.ok)
+        throw new Error("Erro ao remover tarefa");
+
+      fetchTasks();
+    } catch (err) {
+      setError('Erro ao remover tarefa')
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const saveTask = async (task: Task) => {
     fetchTasks();
   }
@@ -75,7 +90,11 @@ const TaskList: React.FC = () => {
       <List>
         {currentTasks.map(task => (
           <ListItem disablePadding key={task.id}>
-            <TaskCard task={task} onEdit={() => openDialogForEditTask(task)} />
+            <TaskCard
+              task={task}
+              onEdit={() => openDialogForEditTask(task)}
+              onRemove={() => removeTask(task)}
+            />
           </ListItem>
         ))}
       </List>

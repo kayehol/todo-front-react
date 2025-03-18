@@ -8,4 +8,5 @@ export interface Task {
 export interface TaskCardProps {
   task: Task;
   onEdit: () => void
+  onRemove: () => void
 }
